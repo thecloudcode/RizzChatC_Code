@@ -129,7 +129,7 @@ void compressString(char* input) {
 }
 
 int main() {
-    char input[] = "this is an example for huffman encoding";
+    char input[] = "Badal";
     compressString(input);
     return 0;
 }

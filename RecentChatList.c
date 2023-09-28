@@ -33,54 +33,41 @@ void insertEnd(struct Node** head, char phoneNumber[], char name[]) {
 }
 
 void moveNode(struct Node** head, int fromPosition, int toPosition) {
-    if (*head == NULL) {
-        printf("List is empty.\n");
-        return;
+    // Check if the positions are valid.
+    if (fromPosition < 0 || toPosition < 0 || fromPosition >= toPosition) {
+    return;
     }
 
-    struct Node* current = *head;
-    int currentPosition = 1;
-
-    while (currentPosition < fromPosition && current != NULL) {
-        current = current->next;
-        currentPosition++;
+    // Find the nodes to be swapped.
+    struct Node* node1 = *head;
+    struct Node* node2 = *head;
+    struct Node* prev1 = NULL;
+    struct Node* prev2 = NULL;
+    for (int i = 0; i < fromPosition; i++) {
+    prev1 = node1;
+    node1 = node1->next;
+    }
+    for (int i = 0; i < toPosition; i++) {
+    prev2 = node2;
+    node2 = node2->next;
     }
 
-    if (current == NULL) {
-        printf("Node not found at position %d.\n", fromPosition);
-        return;
-    }
-
-    if (current->prev != NULL) {
-        current->prev->next = current->next;
+    // Swap the nodes.
+    if (prev1 != NULL) {
+    prev1->next = node2;
     } else {
-        *head = current->next;
+    *head = node2;
     }
-
-    if (current->next != NULL) {
-        current->next->prev = current->prev;
-    }
-
-    currentPosition = 1;
-    current = *head;
-    while (currentPosition < toPosition && current != NULL) {
-        current = current->next;
-        currentPosition++;
-    }
-
-    if (current != NULL) {
-        current->prev->next = current;
-        current->prev = current->prev;
-        current->next = current;
+    if (prev2 != NULL) {
+    prev2->next = node1;
     } else {
-        struct Node* last = *head;
-        while (last->next != NULL) {
-            last = last->next;
-        }
-        last->next = current;
-        current->prev = last;
+    *head = node1;
     }
+    struct Node* temp = node1->next;
+    node1->next = node2->next;
+    node2->next = temp;
 }
+
 
 void printList(struct Node* head) {
     struct Node* current = head;

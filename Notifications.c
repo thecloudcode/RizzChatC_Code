@@ -7,69 +7,80 @@ struct Node {
     struct Node* next;
 };
 
-void push(struct Node** top, char str[]) {
+struct Node* top = NULL;
+
+void push(char data[]) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     if (newNode == NULL) {
         printf("Memory allocation failed.\n");
         exit(1);
     }
-    strcpy(newNode->data, str);
-    newNode->next = *top;
-    *top = newNode;
-    printf("Pushed: %s\n", str);
+    strcpy(newNode->data, data);
+    newNode->next = top;
+    top = newNode;
+    printf("Pushed: %s\n", data);
 }
 
-void pop(struct Node** top) {
-    if (*top == NULL) {
+void pop() {
+    if (top == NULL) {
         printf("Stack is empty. Cannot pop.\n");
         return;
     }
-    struct Node* temp = *top;
-    *top = (*top)->next;
+    struct Node* temp = top;
+    top = top->next;
     printf("Popped: %s\n", temp->data);
     free(temp);
 }
 
-void printStack(struct Node* top) {
-    printf("Stack contents:\n");
+void display() {
     struct Node* current = top;
+    printf("Stack contents:\n");
     while (current != NULL) {
         printf("%s\n", current->data);
         current = current->next;
     }
 }
 
-int main() {
-    struct Node* top = NULL;
-    int choice;
-    char str[100];
+void removeAll() {
+    while (top != NULL) {
+        pop();
+    }
+}
 
-    // push(&top, str);
-    // pop(&top);
-    // printStack(top);
-    do {
+int main() {
+    int choice;
+    char data[100];
+
+    while (1) {
+        printf("\nStack Menu:\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Display\n");
+        printf("4. Remove All\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                scanf("%s", str);
-                push(&top, str);
+                printf("Enter a string to push: ");
+                scanf("%s", data);
+                push(data);
                 break;
             case 2:
-                pop(&top);
+                pop();
                 break;
             case 3:
-                printStack(top);
+                display();
                 break;
             case 4:
+                removeAll();
                 break;
+            case 5:
+                exit(0);
             default:
-                printf("END\n");
+                printf("Invalid choice. Please try again.\n");
         }
-    } while (choice != 4);
-
-    while (top != NULL) {
-        pop(&top);
     }
 
     return 0;
