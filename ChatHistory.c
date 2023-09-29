@@ -2,16 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Define the structure for a doubly linked list node
 struct Node {
-    char data[100]; // Assume a maximum string length of 100 characters
+    char data[100];
     struct Node* prev;
     struct Node* next;
 };
 
-struct Node* head = NULL; // Initialize the head of the doubly linked list as NULL
+struct Node* head = NULL;
 
-// Function to add a string to the end of the list
 void addToEnd(char data[]) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     if (newNode == NULL) {
@@ -34,7 +32,6 @@ void addToEnd(char data[]) {
     printf("Added \"%s\" to the end of the list.\n", data);
 }
 
-// Function to delete a string at a given position
 void deleteAtPosition(int position) {
     if (head == NULL) {
         printf("List is empty. Cannot delete.\n");
@@ -67,7 +64,6 @@ void deleteAtPosition(int position) {
     free(current);
 }
 
-// Function to display all the strings in the list
 void display() {
     struct Node* current = head;
     printf("Doubly Linked List contents:\n");
