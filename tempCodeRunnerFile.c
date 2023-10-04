@@ -2,104 +2,82 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Define a structure for a node in the linked list
 struct Node {
-    char data[100]; // Assuming a maximum string length of 100 characters
+    char data[100];
     struct Node* next;
 };
 
-// Define a structure for the queue
-struct Queue {
-    struct Node* front;
-    struct Node* rear;
-};
+struct Node* top = NULL;
 
-// Function to create an empty queue
-struct Queue* createQueue() {
-    struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));
-    queue->front = queue->rear = NULL;
-    return queue;
-}
-
-// Function to check if the queue is empty
-int isEmpty(struct Queue* queue) {
-    return (queue->front == NULL);
-}
-
-// Function to enqueue (push) a string into the queue
-void enqueue(struct Queue* queue, const char* data) {
+void push(char data[]) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     strcpy(newNode->data, data);
-    newNode->next = NULL;
-    
-    if (isEmpty(queue)) {
-        queue->front = queue->rear = newNode;
-    } else {
-        queue->rear->next = newNode;
-        queue->rear = newNode;
-    }
+    newNode->next = top;
+    top = newNode;
+    printf("Pushed: %s\n", data);
 }
 
-// Function to dequeue (pop) a string from the queue
-void dequeue(struct Queue* queue) {
-    if (isEmpty(queue)) {
-        printf("Queue is empty. Cannot dequeue.\n");
+void pop() {
+    if (top == NULL) {
+        printf("Stack is empty. Cannot pop.\n");
         return;
     }
-    
-    struct Node* temp = queue->front;
-    printf("%s",temp);
-    queue->front = temp->next;
-    
-    // If this was the last element, update rear as well
-    if (queue->front == NULL) {
-        queue->rear = NULL;
-    }
-    
+    struct Node* temp = top;
+    top = top->next;
+    printf("Popped: %s\n", temp->data);
     free(temp);
 }
 
-// Function to remove all elements from the queue
-void removeAll(struct Queue* queue) {
-    while (!isEmpty(queue)) {
-        dequeue(queue);
+void display() {
+    struct Node* current = top;
+    printf("Stack contents:\n");
+    while (current != NULL) {
+        printf("%s\n", current->data);
+        current = current->next;
+    }
+}
+
+void removeAll() {
+    while (top != NULL) {
+        pop();
     }
 }
 
 int main() {
-    struct Queue* queue = createQueue();
     int choice;
-    char str[100];
+    char data[100];
 
-    do {
-        printf("\nQueue Operations:\n");
-        printf("1. Enqueue (Push)\n");
-        printf("2. Dequeue (Pop)\n");
-        printf("3. Remove All\n");
-        printf("4. Exit\n");
+    while (1) {
+        printf("\nStack Menu:\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Display\n");
+        printf("4. Remove All\n");
+        printf("5. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter a string to enqueue: ");
-                scanf("%s", str);
-                enqueue(queue, str);
+                printf("Enter a string to push: ");
+                scanf("%s", data);
+                push(data);
                 break;
             case 2:
-                dequeue(queue);
+                pop();
                 break;
             case 3:
-                removeAll(queue);
-                printf("All elements removed from the queue.\n");
+                display();
                 break;
             case 4:
-                printf("Exiting program.\n");
+                removeAll();
                 break;
+            case 5:
+                exit(0);
             default:
                 printf("Invalid choice. Please try again.\n");
         }
-    } while (choice != 4);
+    }
 
     return 0;
 }
